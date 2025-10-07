@@ -1,1 +1,0 @@
-# compu_grafica_raycasting
