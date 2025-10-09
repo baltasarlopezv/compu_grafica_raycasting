@@ -1,5 +1,6 @@
 from graphics import Graphics
 import glm
+import math
 
 class Scene:
     def __init__(self, ctx, camera):
@@ -7,6 +8,7 @@ class Scene:
         self.objects = []
         self.graphics = {}
         self.camera = camera
+        self.time = 0.0
     
     def add_object(self, obj, shader_program):
         self.objects.append(obj)
@@ -23,20 +25,28 @@ class Scene:
         self.ctx.clear(0.1, 0.1, 0.1, 1.0)
         self.ctx.enable(self.ctx.DEPTH_TEST)
 
+        # Update time for animations
+        self.time += 0.02
+
         # Get camera matrices
         view = self.camera.get_view_matrix()
         projection = self.camera.get_perspective_matrix()
 
-        # Add rotation to each object to show 3D
+        # Add rotation and movement to each object
         for i, obj in enumerate(self.objects):
-            # Cubes rotate in Y, sphere rotates in X and Y
+            # Base movement for all cubes (left to right) - minimal movement
+            base_movement = math.sin(self.time) * 0.5
+            
+            # Rotation on their own axis
             if obj.name == "Cube1":
-                obj.rotation.y += 1.0  # Cube1: clockwise
+                obj.rotation.y += 1.0  # Cube1: clockwise rotation
+                # Move left to right, maintaining left position
+                obj.position.x = -2 + base_movement
             elif obj.name == "Cube2":
-                obj.rotation.y -= 1.0  # Cube2: counterclockwise
-            elif obj.name.startswith("Sphere"):
-                obj.rotation.x += 1.0
-                obj.rotation.y += 1.0
+                obj.rotation.y -= 1.0  # Cube2: counterclockwise rotation
+                # Move left to right, maintaining right position
+                obj.position.x = 2 + base_movement
+            
             model = obj.get_model_matrix()
             mvp = projection * view * model
 
