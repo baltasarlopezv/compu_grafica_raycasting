@@ -4,4 +4,9 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "moderngl>=5.12.0",
+    "pyglet>=2.1.9",
+    "PyGLM>=2.8.2",
+    "numpy>=2.3.4"
+]
